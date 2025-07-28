@@ -1,4 +1,4 @@
- 
+//  ;
 // import express, { Application, Response } from "express";
 // import cors from "cors";
 
@@ -14,29 +14,42 @@
 // import { paymentRouter } from "./payments/payment.route";
 // import { supportRouter } from "./supports/support.route";
 // import reportRouter from "./Reports/reports.routes";
-// import dashboardRouter from "./dashbaord/dashboardRoute"; // ✅ added this line
+// import dashboardRouter from "./dashbaord/dashboardRoute";
 
 // const app: Application = express();
 
-// // Basic Middleware
-// app.use(cors({
-//   origin: 'http://localhost:5173',
-  
+// // ✅ Allow multiple origins (local + Vercel)
+// const allowedOrigins = [
+//   'http://localhost:5173',
+//   'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
+//    'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
+// ];
 
-//   credentials: true,
-// }));
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'));
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
 
+// // Middleware
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 // app.use(logger);
 // app.use(rateLimiterMiddleware);
 
-// // Default Route
+// // Default route
 // app.get('/', (_req, res: Response) => {
 //   res.send("Welcome to Event Ticketing and Venue Booking API");
 // });
 
-// // Route Mounting
+// // Mount routes
 // app.use("/api/", userRouter);
 // app.use("/api/auth", authRouter);
 // app.use("/api/", eventRouter);
@@ -45,7 +58,7 @@
 // app.use("/api/payment", paymentRouter);
 // app.use("/api", supportRouter);
 // app.use("/api/reports", reportRouter);
-// app.use("/api", dashboardRouter); // ✅ makes /api/dashboard-stats available
+// app.use("/api", dashboardRouter);
 
 // export default app;
 import express, { Application, Response } from "express";
@@ -70,14 +83,17 @@ const app: Application = express();
 // ✅ Allow multiple origins (local + Vercel)
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:5000',
   'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
-   'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
+  'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (like mobile apps, curl, Postman)
+      if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost')) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
