@@ -33,7 +33,7 @@ export const verifyToken = async(token:string,secret:string)=>{
     }
 }
 
-//AUTHORIZATION MIDDLEWARE
+//authorization middleware
 export const authMiddleware = async(req: Request, res: Response,next:NextFunction,requiredRoles:string)=>{
     const token = req.header('Authorization')
     if(!token){
@@ -66,7 +66,7 @@ export const authMiddleware = async(req: Request, res: Response,next:NextFunctio
 }
 
 
-//Middleware to check if the user is admin
+//Middleware to check if the admin 
 export const adminRoleAuth = async (req: Request, res: Response, next: NextFunction) => await authMiddleware(req,res,next,"admin")
 export const memberRoleAuth = async (req: Request, res: Response, next: NextFunction) => await authMiddleware(req,res,next,"member")
 export const bothRoleAuth = async (req: Request, res: Response, next: NextFunction) => await authMiddleware(req,res,next,"both")

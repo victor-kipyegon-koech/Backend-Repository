@@ -1,27 +1,25 @@
-import { Router } from "express";
-
-import { adminRoleAuth } from "../middleware/bearAuth";
+ 
+ import { Router } from "express";
 import {
   createBooking,
   deleteBooking,
   getBookingById,
   getBookings,
   updateBooking,
+  updateBookingStatus,
 } from "./booking.controller";
 
 export const bookingRouter = Router();
 
-// get all bookings
+// ✅ More specific route FIRST
 bookingRouter.get("/bookings", getBookings);
 
-// geta booking by  id
+// ✅ Then dynamic route
 bookingRouter.get("/bookings/:id", getBookingById);
 
-// Create  booking  
+// ✅ Other routes
 bookingRouter.post("/bookings", createBooking);
-
-//update a booking 
 bookingRouter.put("/bookings/:id", updateBooking);
-
-// delete a booking 
+bookingRouter.patch("/bookings/:id/status", updateBookingStatus);
 bookingRouter.delete("/bookings/:id", deleteBooking);
+

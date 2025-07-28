@@ -1,12 +1,25 @@
- import { relations } from "drizzle-orm";
-import { pgTable,serial,varchar,text,integer,decimal,timestamp,pgEnum} from "drizzle-orm/pg-core";
+ 
+import { relations } from "drizzle-orm";
+import {
+  pgTable,
+  serial,
+  varchar,
+  text,
+  integer,
+  decimal,
+  timestamp,
+  pgEnum,
+  boolean,
+} from "drizzle-orm/pg-core";
 
+// Enums
 export const roleEnum = pgEnum("userType", ["member", "admin", "disabled"]);
-export const bookingStatusEnum = pgEnum("bookingStatus", ["pending",  "confirmed", "canceled",  "completed", ]);
-export const paymentStatusEnum = pgEnum("paymentStatus", ["pending", "failed", "canceled", "completed"]);
-export const ticketStatusEnum = pgEnum("ticketStatus", ["pending",  "in_progress",  "resolved",     "closed"]);
+export const bookingStatusEnum = pgEnum("bookingStatus", ["pending", "confirmed", "canceled", "completed"]);
+export const paymentStatusEnum = pgEnum("paymentStatus", ["pending", "failed", "canceled", "completed", "refunded"]);
+export const ticketStatusEnum = pgEnum("ticketStatus", ["pending", "in_progress", "resolved", "closed"]);
+export const ticketPriorityEnum = pgEnum("ticketPriority", ["low", "medium", "high"]);
 
-// Users table 
+// Users
 export const userTable = pgTable("userTable", {
   userId: serial("userId").primaryKey(),
   firstName: varchar("firstName"),
@@ -16,11 +29,15 @@ export const userTable = pgTable("userTable", {
   contactPhone: varchar("contactPhone"),
   address: text("address"),
   userType: roleEnum("userType").default("member"),
+  //  avatarUrl: varchar("avatar_url", { length: 500 }),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow(),
+  
+   
+
 });
 
-// Venue table
+// Venues
 export const venueTable = pgTable("venueTable", {
   venueId: serial("venueId").primaryKey(),
   name: varchar("name").notNull(),
@@ -45,7 +62,7 @@ export const eventTable = pgTable("eventTable", {
   updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
-// Bookings tables
+// Bookings
 export const bookingTable = pgTable("bookingTable", {
   bookingId: serial("bookingId").primaryKey(),
   userId: integer("userId").notNull().references(() => userTable.userId, { onDelete: "cascade" }),
@@ -57,7 +74,7 @@ export const bookingTable = pgTable("bookingTable", {
   updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
-// Payment table
+// Payments
 export const paymentTable = pgTable("paymentTable", {
   paymentId: serial("paymentId").primaryKey(),
   bookingId: integer("bookingId").notNull().references(() => bookingTable.bookingId, { onDelete: "cascade" }),
@@ -70,19 +87,40 @@ export const paymentTable = pgTable("paymentTable", {
   updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
-// Support Tickets table
+// Support Tickets
 export const supportTable = pgTable("supportTable", {
   ticketId: serial("ticketId").primaryKey(),
   userId: integer("userId").notNull().references(() => userTable.userId, { onDelete: "cascade" }),
   subject: varchar("subject", { length: 255 }).notNull(),
   message: text("message").notNull(),
+  priority: ticketPriorityEnum("priority").notNull().default("medium"),
   status: ticketStatusEnum("status").default("pending"),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
-// RELATIONS
+// Stripe Configuration (Updated)
+export const stripeConfigTable = pgTable("stripeConfigTable", {
+  id: serial("id").primaryKey(),
+  publishableKey: varchar("publishableKey").notNull(),
+  secretKey: varchar("secretKey").notNull(),
+  webhookEndpoint: varchar("webhookEndpoint").notNull(),
+  currency: varchar("currency").default("USD"),
+  testMode: boolean("testMode").default(true),
+  stripeEnabled: boolean("stripeEnabled").default(true),
+  paymentMethods: text("paymentMethods").array().notNull().default([]),
+  updatedAt: timestamp("updatedAt").defaultNow(),
+});
 
+// Webhook Logs
+export const webhookLogTable = pgTable("webhookLogTable", {
+  id: serial("id").primaryKey(),
+  event: varchar("event").notNull(),
+  status: varchar("status").notNull(),
+  receivedAt: timestamp("receivedAt").defaultNow(),
+});
+
+// Relationships
 export const userRelations = relations(userTable, ({ many }) => ({
   bookings: many(bookingTable),
   supportTickets: many(supportTable),
@@ -128,8 +166,8 @@ export const supportRelations = relations(supportTable, ({ one }) => ({
     references: [userTable.userId],
   }),
 }));
-// TYPES
 
+// Types
 export type TUserInsert = typeof userTable.$inferInsert;
 export type TUserSelect = typeof userTable.$inferSelect;
 
@@ -147,3 +185,10 @@ export type TPaymentSelect = typeof paymentTable.$inferSelect;
 
 export type TSupportInsert = typeof supportTable.$inferInsert;
 export type TSupportSelect = typeof supportTable.$inferSelect;
+
+export type TStripeConfigInsert = typeof stripeConfigTable.$inferInsert;
+export type TStripeConfigSelect = typeof stripeConfigTable.$inferSelect;
+
+export type TWebhookLogInsert = typeof webhookLogTable.$inferInsert;
+export type TWebhookLogSelect = typeof webhookLogTable.$inferSelect;
+

@@ -21,10 +21,11 @@ content-type: application/json
   "contactphone":"011239577",
   "address":"5000",
   "password": "377474",
-  "userType":"member"
+  "userType":"member",
+  
 }
 
-//Get user by id
+//Get user bY id 
 ###
  GET http://localhost:5000/api/users/1
 
@@ -84,9 +85,9 @@ POST http://localhost:5000/api/venues/
 content-type: application/json
  
  {
- "name": "vision",
-  "address": "New centre, Nakuru",
-  "capacity": 4500
+ "name": "mandela",
+  "address": "New Max-Forwards: , mombasa",
+  "capacity": 1230
 }
 
 //get venues by id
@@ -123,17 +124,17 @@ POST http://localhost:5000/api/events/
 content-type: application/json
  
  {
-  "title": "  REGGAE",
-  "description": "prefered reggae songs perfomance .",
-  "venueId": 4,
-  "category": "Reggae musics",
+  "title": "  comedy",
+  "description": "modern comedy songs perfomance .",
+  "venueId": 8,
+  "category": "comedy live",
   "date": "2025-07-23",
   "time": "2:00",
   "ticketPrice": 1600.00,
   "ticketsTotal": 35
 }
 
-//get events by id 
+//get events by id
 ###
 GET http://localhost:5000/api/events/3
 
@@ -143,8 +144,8 @@ PUT http://localhost:5000/api/events/3
 Content-Type: application/json
 
 {
-  "title": "music analysis ",
-  "description": "the event will be held place in the new vision hall at 2pm.",
+  "title": "music and dance ",
+  "description": "The event will be held place in the main hall.",
   "venueId": 4,
   "category": "Entertainment",
   "date": "2025-08-11",
@@ -158,7 +159,7 @@ Content-Type: application/json
 ###
 DELETE  http://localhost:5000/api/events/2
 
-//BOOKINGS
+// bookings 
 
 //get bookimgs
 
@@ -167,18 +168,18 @@ GET   http://localhost:5000/api/bookings
 
 //create bookings
 ###
-POST http://localhost:5000/api/bookings/
+POST http://localhost:5000/api/bookings
 Content-Type: application/json
 
 {
-  "userId": 4,
-  "eventId": 8,
+  "userId": 48,
+  "eventId": 53,
   "quantity": 1,
-  "totalAmount": "4500.00", 
-  "status":"pending"
+  "totalAmount": "1050.00", 
+  "status":"confirmed"
 }
 
-//get bookings  by id 
+//get bookings by id 
 ###
 GET http://localhost:5000/api/bookings/4
 
@@ -198,25 +199,23 @@ DELETE  http://localhost:5000/api/bookings/4
 
 //PAYMENTS
 
-//payments
-
 //get all payments
 ###
-GET   http://localhost:5000/api/payments/
+GET   http://localhost:5000/api/payment/
 
 
 //create payments
 
 ###
-POST http://localhost:5000/api/payments/
+POST http://localhost:5000/api/payment/
 Content-Type: application/json
 
 {
-  "bookingId": 4,
-  "amount": "3500.00",
-  "paymentMethod": "mswari",
-  "transactionId": "MWSHWARI123456789",
-  "paymentStatus": "completed"
+  "bookingId": 22,
+  "amount": "1000.00",
+  "paymentMethod": "mpesa",
+  "transactionId": "CONFIRM123456789",
+  "paymentStatus": "failed"
 }
 //get payments by id
 ###
@@ -235,11 +234,11 @@ Content-Type: application/json
   "paymentStatus": "completed"
 }
 
-//delete payments
+//DELETE PAYMENTS
 ###
 DELETE  http://localhost:5000/api/payments/3
 
-//support tickets
+//SUPPORTS TICKETS
 
 // get support tickets
 ###
@@ -252,15 +251,15 @@ POST http://localhost:5000/api/supports/
 Content-Type: application/json
   
   {
-  "userId": 4,
-  "subject": "on final submission",
+  "userId": 21,
+  "subject": "just a week",
   "message": " Please wait a while kindly.",
-  "status": "pending" 
+  "status": " pending" 
 }
 
 //Get sugpport tickets by id
 ###
-GET http://localhost:5000/api/supports/1
+GET http://localhost:5000/api/supports/13
 
 
 

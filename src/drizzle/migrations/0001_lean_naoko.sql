@@ -1,0 +1,1 @@
+ALTER TABLE "userTable" DROP COLUMN "avatar_url";

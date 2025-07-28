@@ -1,6 +1,6 @@
 {
-  "id": "cf8c16b1-7830-4bb9-a86c-e2f6a4207df9",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "182e7f21-45d4-4256-84ad-db78a83b74a3",
+  "prevId": "cf8c16b1-7830-4bb9-a86c-e2f6a4207df9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -490,12 +490,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'member'"
-        },
-        "avatar_url": {
-          "name": "avatar_url",
-          "type": "varchar(500)",
-          "primaryKey": false,
-          "notNull": false
         },
         "createdAt": {
           "name": "createdAt",

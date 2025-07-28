@@ -1,27 +1,45 @@
- import { Request, Response } from "express";
+ 
+import { Request, Response } from "express";
 import {
   getBookingsServices,
   getBookingByIdServices,
   createBookingServices,
   updateBookingServices,
   deleteBookingServices,
+  allowedStatuses,
+  BookingStatus,
 } from "./booking.service";
 
-//get bookings
+// ✅ Get all bookings with optional filters
 export const getBookings = async (req: Request, res: Response): Promise<void> => {
   try {
-    const allBookings = await getBookingsServices();
-    if (!allBookings || allBookings.length === 0) {
-      res.status(404).json({ message: "No bookings found" });
-    } else {
-      res.status(200).json(allBookings);
+    const { userId, status } = req.query;
+
+    const parsedUserId =
+      typeof userId === 'string' && userId.trim() !== '' && !isNaN(Number(userId))
+        ? Number(userId)
+        : undefined;
+
+    const parsedStatus = status as BookingStatus | undefined;
+
+    if (parsedStatus && !allowedStatuses.includes(parsedStatus)) {
+      res.status(400).json({ error: "Invalid booking status filter" });
+      return;
     }
+
+    const allBookings = await getBookingsServices({
+      userId: parsedUserId,
+      status: parsedStatus,
+    });
+
+    // ✅ Return empty array if no bookings instead of 404
+    res.status(200).json(allBookings || []);
   } catch (error: any) {
     res.status(500).json({ message: error.message || "Failed to fetch bookings" });
   }
 };
 
-// get booking by ID
+// ✅ Get a single booking by ID
 export const getBookingById = async (req: Request, res: Response): Promise<void> => {
   const bookingId = parseInt(req.params.id);
   if (isNaN(bookingId)) {
@@ -41,15 +59,9 @@ export const getBookingById = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// create  booking
+// ✅ Create a new booking
 export const createBooking = async (req: Request, res: Response): Promise<void> => {
-  const {
-    userId,
-    eventId,
-    quantity,        
-    totalAmount,
-    status,          
-  } = req.body;
+  const { userId, eventId, quantity, totalAmount, status } = req.body;
 
   if (!userId || !eventId || !quantity || !totalAmount) {
     res.status(400).json({
@@ -58,21 +70,27 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
     return;
   }
 
+  if (status && !allowedStatuses.includes(status)) {
+    res.status(400).json({ error: "Invalid booking status" });
+    return;
+  }
+
   try {
-    const message = await createBookingServices({
+    const newBooking = await createBookingServices({
       userId,
       eventId,
       quantity,
       totalAmount,
       status,
     });
-    res.status(201).json({ message });
+
+    res.status(201).json(newBooking);
   } catch (error: any) {
     res.status(500).json({ error: error.message || "Failed to create booking" });
   }
 };
 
-// update  booking
+// ✅ Update an entire booking
 export const updateBooking = async (req: Request, res: Response): Promise<void> => {
   const bookingId = parseInt(req.params.id);
   if (isNaN(bookingId)) {
@@ -80,13 +98,12 @@ export const updateBooking = async (req: Request, res: Response): Promise<void> 
     return;
   }
 
-  const {
-    userId,
-    eventId,
-    quantity,
-    totalAmount,
-    status,
-  } = req.body;
+  const { userId, eventId, quantity, totalAmount, status } = req.body;
+
+  if (status && !allowedStatuses.includes(status)) {
+    res.status(400).json({ error: "Invalid booking status" });
+    return;
+  }
 
   try {
     const message = await updateBookingServices(bookingId, {
@@ -96,13 +113,37 @@ export const updateBooking = async (req: Request, res: Response): Promise<void> 
       totalAmount,
       status,
     });
+
     res.status(200).json({ message });
   } catch (error: any) {
     res.status(500).json({ error: error.message || "Failed to update booking" });
   }
 };
 
-// delete booking
+// ✅ Update booking status only
+export const updateBookingStatus = async (req: Request, res: Response): Promise<void> => {
+  const bookingId = parseInt(req.params.id);
+  const { status } = req.body;
+
+  if (isNaN(bookingId) || !status) {
+    res.status(400).json({ error: "Invalid booking ID or missing status" });
+    return;
+  }
+
+  if (!allowedStatuses.includes(status)) {
+    res.status(400).json({ error: "Invalid booking status" });
+    return;
+  }
+
+  try {
+    const message = await updateBookingServices(bookingId, { status });
+    res.status(200).json({ message });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || "Failed to update booking status" });
+  }
+};
+
+// ✅ Delete a booking
 export const deleteBooking = async (req: Request, res: Response): Promise<void> => {
   const bookingId = parseInt(req.params.id);
   if (isNaN(bookingId)) {
