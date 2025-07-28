@@ -71,6 +71,7 @@ const app: Application = express();
 const allowedOrigins = [
   'http://localhost:5173',
   'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
+   'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
 ];
 
 app.use(
