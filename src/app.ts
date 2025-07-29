@@ -82,11 +82,13 @@ const app: Application = express();
 
 // ✅ Allow multiple origins (local + Vercel)
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:5000',
-  'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
-  'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
+  // 'http://localhost:5173',
+  // 'http://127.0.0.1:5173',
+  // 'http://localhost:5000',
+  // 'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
+  // 'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
+  "https://front-mherydoz9-victor-kipyegons-projects-e912668c.vercel.app"
+  
 ];
 
 app.use(
