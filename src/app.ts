@@ -1,4 +1,4 @@
- 
+
 // import express, { Application, Response } from "express";
 // import cors from "cors";
 
@@ -18,26 +18,24 @@
 
 // const app: Application = express();
 
-
+// // ✅ Allowed frontends
 // const allowedOrigins = [
-//   // 'http://localhost:5173',
-//   // 'http://127.0.0.1:5173',
-//   // 'http://localhost:5000',
-//   // 'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
-//   // 'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
-//   "https://front-mherydoz9-victor-kipyegons-projects-e912668c.vercel.app",
-//    'https://frontend-repository-s86b.vercel.app'
+//   // "http://localhost:5173",
+//   // "http://127.0.0.1:5173",
+//   // "http://localhost:5000",
   
+//   "https://frontend-repository-s86b.vercel.app" ,
+// // "  https://frontend-repository-git-main-victor-kipyegons-projects-e912668c.vercel.app"
 // ];
 
 // app.use(
 //   cors({
 //     origin: (origin, callback) => {
-//       // Allow requests with no origin (like mobile apps, curl, Postman)
-//       if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost')) {
+//       if (!origin || allowedOrigins.includes(origin) || origin.startsWith("http://localhost")) {
 //         callback(null, true);
 //       } else {
-//         callback(new Error('Not allowed by CORS'));
+//         console.error("❌ Blocked by CORS:", origin);
+//         callback(new Error("Not allowed by CORS"));
 //       }
 //     },
 //     credentials: true,
@@ -67,6 +65,7 @@
 // app.use("/api", dashboardRouter);
 
 // export default app;
+
 import express, { Application, Response } from "express";
 import cors from "cors";
 
@@ -86,22 +85,32 @@ import dashboardRouter from "./dashbaord/dashboardRoute";
 
 const app: Application = express();
 
-// ✅ Allowed frontends
 const allowedOrigins = [
-  // "http://localhost:5173",
-  // "http://127.0.0.1:5173",
-  // "http://localhost:5000",
-  
-  "https://frontend-repository-s86b.vercel.app" ,
-"  https://frontend-repository-git-main-victor-kipyegons-projects-e912668c.vercel.app"
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:5000",
+  "https://frontend-repository-s86b.vercel.app", // ✅ Main deployed frontend
+  "https://frontend-repository-git-main-victor-kipyegons-projects-e912668c.vercel.app", // ✅ Preview URL
+  "https://front-mherydoz9-victor-kipyegons-projects-e912668c.vercel.app" // ✅ Another preview URL
 ];
 
+// Enable CORS
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || origin.startsWith("http://localhost")) {
+      console.log("🔎 CORS origin:", origin);
+
+      // ✅ Allow requests with no origin (e.g. Postman) or from allowed list
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
-      } else {
+      }
+
+      // Optional: Allow all Vercel preview domains
+      // else if (origin.endsWith(".vercel.app")) {
+      //   callback(null, true);
+      // }
+
+      else {
         console.error("❌ Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
@@ -110,15 +119,15 @@ app.use(
   })
 );
 
-// Middleware
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 app.use(rateLimiterMiddleware);
 
 // Default route
-app.get('/', (_req, res: Response) => {
-  res.send("Welcome to Event Ticketing and Venue Booking API");
+app.get("/", (_req, res: Response) => {
+  res.send("✅ Welcome to Event Ticketing and Venue Booking API");
 });
 
 // Mount routes
@@ -133,4 +142,3 @@ app.use("/api/reports", reportRouter);
 app.use("/api", dashboardRouter);
 
 export default app;
-
