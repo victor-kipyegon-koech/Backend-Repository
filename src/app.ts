@@ -1,4 +1,4 @@
-//  ;
+ 
 // import express, { Application, Response } from "express";
 // import cors from "cors";
 
@@ -18,17 +18,23 @@
 
 // const app: Application = express();
 
-// // ✅ Allow multiple origins (local + Vercel)
+
 // const allowedOrigins = [
-//   'http://localhost:5173',
-//   'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
-//    'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
+//   // 'http://localhost:5173',
+//   // 'http://127.0.0.1:5173',
+//   // 'http://localhost:5000',
+//   // 'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
+//   // 'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
+//   "https://front-mherydoz9-victor-kipyegons-projects-e912668c.vercel.app",
+//    'https://frontend-repository-s86b.vercel.app'
+  
 // ];
 
 // app.use(
 //   cors({
 //     origin: (origin, callback) => {
-//       if (!origin || allowedOrigins.includes(origin)) {
+//       // Allow requests with no origin (like mobile apps, curl, Postman)
+//       if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost')) {
 //         callback(null, true);
 //       } else {
 //         callback(new Error('Not allowed by CORS'));
@@ -80,25 +86,23 @@ import dashboardRouter from "./dashbaord/dashboardRoute";
 
 const app: Application = express();
 
-// ✅ Allow multiple origins (local + Vercel)
+// ✅ Allowed frontends
 const allowedOrigins = [
-  // 'http://localhost:5173',
-  // 'http://127.0.0.1:5173',
-  // 'http://localhost:5000',
-  // 'https://front-72mn3nuqz-victor-kipyegons-projects-e912668c.vercel.app',
-  // 'https://front-itbx5qmat-victor-kipyegons-projects-e912668c.vercel.app'
-  "https://front-mherydoz9-victor-kipyegons-projects-e912668c.vercel.app"
+  // "http://localhost:5173",
+  // "http://127.0.0.1:5173",
+  // "http://localhost:5000",
   
+  "https://frontend-repository-s86b.vercel.app" 
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, Postman)
-      if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost')) {
+      if (!origin || allowedOrigins.includes(origin) || origin.startsWith("http://localhost")) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        console.error("❌ Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
@@ -128,3 +132,4 @@ app.use("/api/reports", reportRouter);
 app.use("/api", dashboardRouter);
 
 export default app;
+
