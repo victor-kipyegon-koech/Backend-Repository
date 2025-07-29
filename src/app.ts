@@ -92,7 +92,7 @@ const allowedOrigins = [
   // "http://127.0.0.1:5173",
   // "http://localhost:5000",
   
-  // "https://frontend-repository-s86b.vercel.app" 
+  "https://frontend-repository-s86b.vercel.app" ,
 "  https://frontend-repository-git-main-victor-kipyegons-projects-e912668c.vercel.app"
 ];
 
