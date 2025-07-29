@@ -20,11 +20,8 @@ const app: Application = express();
 // ✅ Define allowed frontend origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  "http://localhost:5000",
-  "https://frontend-repository-s86b.vercel.app", // ✅ Main deployed frontend
-  "https://frontend-repository-git-main-victor-kipyegons-projects-e912668c.vercel.app", // ✅ Preview
-  "https://front-mherydoz9-victor-kipyegons-projects-e912668c.vercel.app", // ✅ Preview
+  
+ " https://frontend-repository-ten.vercel.app/"
 ];
 
 // ✅ CORS middleware
