@@ -19,9 +19,9 @@ const app: Application = express();
 
 // Allowed frontend origins
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://frontend-repository-ten.vercel.app",
-  "https://frontend-repository-s86b.vercel.app",
+  // "http://localhost:5173",
+  // "https://frontend-repository-ten.vercel.app",
+  // "https://frontend-repository-s86b.vercel.app",
   "https://frontend-repository-git-main-victor-kipyegons-projects-e912668c.vercel.app"
 ];
 

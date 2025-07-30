@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["jest"],
+    // "types": ["jest"],
     "isolatedModules": true
   },
   "include": ["src/**/*.ts","tests"],
