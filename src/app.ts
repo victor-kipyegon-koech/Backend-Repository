@@ -1,4 +1,4 @@
- import express, { Application, Response } from "express";
+import express, { Application, Response } from "express";
 import cors from "cors";
 
 import { logger } from "./middleware/logger";
@@ -17,15 +17,21 @@ import dashboardRouter from "./dashbaord/dashboardRoute";
 
 const app: Application = express();
 
-// Allowed frontend origins
+// ✅ Allowed frontend origins (no trailing slash!)
 const allowedOrigins = [
   // "http://localhost:5173",
   // "https://frontend-repository-ten.vercel.app",
   // "https://frontend-repository-s86b.vercel.app",
-"https://eventticketings.netlify.app/"
+  "https://eventticketings.netlify.app"
 ];
 
-// CORS middleware
+// ✅ Optional: log incoming origin for debugging
+app.use((req, _res, next) => {
+  console.log("🔍 Incoming request from origin:", req.headers.origin);
+  next();
+});
+
+// ✅ CORS middleware
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -41,18 +47,18 @@ app.use(
   })
 );
 
-// Core middlewares
+// 🔧 Core middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 app.use(rateLimiterMiddleware);
 
-// Test route
+// ✅ Test route
 app.get("/", (_req, res: Response) => {
   res.send("✅ Welcome to Event Ticketing and Venue Booking API");
 });
 
-// Mount routes with clean base paths
+// ✅ Mount routes
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventRouter);
