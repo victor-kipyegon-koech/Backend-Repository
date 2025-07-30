@@ -62,7 +62,7 @@ app.get("/", (_req, res: Response) => {
 app.use("/api", userRouter);
 app.use("/api", authRouter);
 app.use("/api", eventRouter);
-app.use("/api/venues", venueRouter);
+app.use("/api", venueRouter);
 app.use("/api", bookingRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api", supportRouter);
