@@ -59,13 +59,13 @@ app.get("/", (_req, res: Response) => {
 });
 
 // ✅ Mount routes
-app.use("/api/users", userRouter);
+app.use("/api", userRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/events", eventRouter);
+app.use("/api", eventRouter);
 app.use("/api/venues", venueRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/payment", paymentRouter);
-app.use("/api/supports", supportRouter);
+app.use("/api", supportRouter);
 app.use("/api/reports", reportRouter);
 app.use("/api/dashboard", dashboardRouter);
 
