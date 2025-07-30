@@ -1,4 +1,4 @@
- import express, { Application, Request, Response } from "express";
+ import express, { Application, Response } from "express";
 import cors from "cors";
 
 import { logger } from "./middleware/logger";
@@ -17,7 +17,7 @@ import dashboardRouter from "./dashbaord/dashboardRoute";
 
 const app: Application = express();
 
-// ✅ Whitelist for frontend domains
+// Allowed frontend origins
 const allowedOrigins = [
   "http://localhost:5173",
   "https://frontend-repository-ten.vercel.app",
@@ -25,40 +25,34 @@ const allowedOrigins = [
   "https://frontend-repository-git-main-victor-kipyegons-projects-e912668c.vercel.app"
 ];
 
-// ✅ CORS config
-const corsOptions: cors.CorsOptions = {
-  origin: (origin, callback) => {
-    console.log("🔎 CORS origin:", origin);
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error("❌ Blocked by CORS:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// CORS middleware
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      console.log("🔎 CORS origin:", origin);
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.error("❌ Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
-// ✅ Apply CORS early
-app.use(cors(corsOptions));
-
-// ✅ Handle preflight (OPTIONS) requests globally
-app.options("*", cors(corsOptions));
-
-// ✅ Standard middlewares
+// Core middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 app.use(rateLimiterMiddleware);
 
-// ✅ Test route
+// Test route
 app.get("/", (_req, res: Response) => {
   res.send("✅ Welcome to Event Ticketing and Venue Booking API");
 });
 
-// ✅ Routes
+// Mount routes with clean base paths
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventRouter);
