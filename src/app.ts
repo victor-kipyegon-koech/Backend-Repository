@@ -60,10 +60,10 @@ app.get("/", (_req, res: Response) => {
 
 // ✅ Mount routes
 app.use("/api", userRouter);
-app.use("/api/auth", authRouter);
+app.use("/api", authRouter);
 app.use("/api", eventRouter);
 app.use("/api/venues", venueRouter);
-app.use("/api/bookings", bookingRouter);
+app.use("/api", bookingRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api", supportRouter);
 app.use("/api/reports", reportRouter);
