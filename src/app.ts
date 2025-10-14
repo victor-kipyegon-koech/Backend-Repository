@@ -17,21 +17,19 @@ import dashboardRouter from "./dashbaord/dashboardRoute";
 
 const app: Application = express();
 
-// ✅ Allowed frontend origins (no trailing slash!)
+//  Allowed frontend origins (no trailing slash!)
 const allowedOrigins = [
-  // "http://localhost:5173",
-  // "https://frontend-repository-ten.vercel.app",
-  // "https://frontend-repository-s86b.vercel.app",
+  "http://localhost:5173",
   "https://eventticketings.netlify.app"
 ];
 
-// ✅ Optional: log incoming origin for debugging
+//  Optional: log incoming origin for debugging
 app.use((req, _res, next) => {
   console.log("🔍 Incoming request from origin:", req.headers.origin);
   next();
 });
 
-// ✅ CORS middleware
+//  CORS middleware
 app.use(
   cors({
     origin: (origin, callback) => {
