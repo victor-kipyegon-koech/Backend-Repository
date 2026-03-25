@@ -1,9 +1,6 @@
  
 import { Request, Response } from "express";
-import {
-  createUserSchema,
-  updateUserSchema
-} from "../validation/validation";
+import {createUserSchema,updateUserSchema} from "../validation/validation";
 import {
   createUserServices,
   deleteUserServices,
